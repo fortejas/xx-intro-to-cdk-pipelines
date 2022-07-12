@@ -1,7 +1,7 @@
-import { Stack, StackProps } from "aws-cdk-lib";
+import { App, Stack, StackProps } from "aws-cdk-lib";
 import { CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
-import { MyApplicationStack, MyApplicationStage } from "./my-application-stack";
+import { MyApplicationStage } from "./my-application-stack";
 
 export class MyApplicationPipelineStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
@@ -26,7 +26,16 @@ export class MyApplicationPipelineStack extends Stack {
 
         const myApp = new MyApplicationStage(this, 'Dev', {})
 
-        pipeline.addStage(myApp)
+        const devStage = pipeline.addStage(myApp)
+
+        devStage.addPost(new ShellStep('SmokeTest', {
+            envFromCfnOutputs: {
+                URL: myApp.loadBalancerAddr
+            },
+            commands: [
+                'curl -Ssf $URL'
+            ]
+        }))
 
     }
 }

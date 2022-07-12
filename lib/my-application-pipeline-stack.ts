@@ -7,7 +7,7 @@ export class MyApplicationPipelineStack extends Stack {
         super(scope, id, props)
 
         // Need to point to an existing connection.
-        const connectionArn = ''
+        const connectionArn = 'arn:aws:codestar-connections:eu-west-1:335688126910:connection/8553f863-0a85-4f5e-bff7-e97de16bd390'
 
         new CodePipeline(this, 'Pipeline', {
             pipelineName: 'MyApplicationPipeline',

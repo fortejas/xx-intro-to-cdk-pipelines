@@ -37,5 +37,7 @@ export class MyApplicationPipelineStack extends Stack {
             ]
         }))
 
+        pipeline.addStage(new MyApplicationStage(this, 'Prod', {}))
+
     }
 }
